@@ -73,6 +73,24 @@ Key fields: `EarliestStartDate` / `DueDate` (scheduling window), `SchedStartTime
 
 Weights are 1-10. Formula: `objective_contribution = (score × weight) / sum_of_all_weights`
 
+## SDO Scheduling Fields
+
+Key SDO custom fields that affect scheduling behavior:
+
+| Field | Object | Impact |
+|-------|--------|--------|
+| `FSL__Emergency__c` | SA | Bypasses normal rules, enables priority scheduling |
+| `FSL__Pinned__c` | SA | Prevents Optimize/RSO from moving this SA |
+| `FSL__Same_Resource__c` | SA | Forces same resource across related SAs |
+| `FSL__Schedule_Mode__c` | SA | Manual vs Automatic scheduling |
+| `FSL__InJeopardy__c` | SA | Flags at-risk appointments |
+| `Why_Not_*` fields | SA | Scheduling analysis — why resources weren't selected |
+| `FSL__Scheduling_Priority__c` | WO | Priority value for scheduling engine |
+| `FSL__O2_Enabled__c` | ST | Enables enhanced optimization per territory |
+| `FSL__NumberOfServicesToDripFeed__c` | ST | Controls drip feed per territory |
+
+See @references/sdo-custom-fields.md in the data model skill for full SDO field reference.
+
 ## Detailed References
 
 - @references/work-rules.md — All work rule types with configuration details

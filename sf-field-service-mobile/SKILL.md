@@ -108,6 +108,23 @@ if (scanner != null && scanner.isAvailable()) { /* use it */ }
 
 DC Flows are assigned to **Work Types** (Setup > Field Service > Work Types > Data Capture Flows). Mobile-only — cannot run on desktop.
 
+## SDO Mobile Fields
+
+Key SDO custom fields relevant to mobile workflows:
+
+| Field | Object | Use |
+|-------|--------|-----|
+| `FSSK__FSK_Mobile_Start_Time__c` | SA | Mobile app start timestamp |
+| `FSSK__FSK_Mobile_End_Time__c` | SA | Mobile app end timestamp |
+| `FSSK__FSK_Reject_Service_Appointment__c` | SA | Mobile rejection workflow |
+| `Work_Acceptance_Status__c` | SA | Accept/Reject from mobile |
+| `Running_Late_in_mins__c` | SA | Real-time tracking (15/30/45/60+) |
+| `Customer_NPS__c` | SA | Post-service NPS capture |
+| `En_Route_Location__c` | SR | Real-time GPS location |
+| `Last_Mile_Location__c` | SR | Last-mile tracking |
+
+See @references/sdo-custom-fields.md in the data model skill for full SDO field reference.
+
 ## Detailed References
 
 - @references/mobile-capabilities.md — Camera, barcode, GPS, NFC APIs with full code examples

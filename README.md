@@ -124,6 +124,30 @@ Ask for mobile LWC code:
 Ask about Data Capture Flows:
 > "Create a Data Capture Flow XML for an equipment inspection with photo capture, condition picklist, meter reading, and customer signature."
 
+## SDO (Sales Demo Org) Support
+
+These skills include **SDO-specific custom field references** pulled from a live SFS demo org. This gives Claude awareness of:
+
+- **42 custom WorkOrder fields** — payment collection, depot repair, inspection checklists, opportunity linking
+- **89 custom ServiceAppointment fields** — FSL managed package scheduling fields, FSSK starter kit fields, Why Not analysis, contractor management, real-time tracking
+- **31 custom ServiceResource fields** — contractor management, optimization KPIs, travel tracking, en-route location
+- **33 custom Asset fields** — performance metrics (MTTR/MTBF), warranty status, IoT usage data
+- Plus custom fields on ServiceTerritory, ServiceTerritoryMember, ResourceAbsence, and MaintenancePlan
+
+Each skill's SKILL.md includes a quick reference table of the most relevant SDO fields for that domain, with full details in `sf-field-service-data-model/references/sdo-custom-fields.md`.
+
+### Demo Scenario Quick Reference
+
+| Scenario | Key SDO Fields |
+|----------|---------------|
+| Depot Repair | `Depot_Repair_Status__c`, `Expected_Completion_Date__c` |
+| Payment Collection | `Amount__c`, `Payme__c`, `Payment_received__c` |
+| Emergency Dispatch | `FSL__Emergency__c`, `FSL__Schedule_over_lower_priority_appointment__c` |
+| Contractor Management | `Requires_Contractor__c`, `Is_Contractor__c` |
+| Real-Time Tracking | `Running_Late_in_mins__c`, `En_Route_Location__c` |
+| Optimization ROI | `Travel_Savings__c`, `Travel_Delta__c`, `Optimization_Revenue__c` |
+| Asset Performance | `Asset_Availability__c`, `Average_Time_Between_Failures__c` |
+
 ## Compatibility
 
 - **Claude Code**: Full support (primary target)

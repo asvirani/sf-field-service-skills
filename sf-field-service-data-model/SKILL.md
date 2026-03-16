@@ -79,3 +79,4 @@ ProductRequired / ProductConsumed → WorkOrder / WOLI
 - @references/relationship-map.md — Complete relationship map with field names
 - @references/soql-patterns.md — Common SOQL query patterns
 - @references/gotchas.md — Data model gotchas and best practices
+- @references/sdo-custom-fields.md — SDO custom fields on all FSL objects (demo org specific)
