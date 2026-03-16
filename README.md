@@ -2,6 +2,8 @@
 
 Developer reference skills for [Claude Code](https://docs.anthropic.com/en/docs/build-with-claude/claude-code/overview) that provide comprehensive Salesforce Field Service (SFS/FSL) knowledge — data model, scheduling engine, and mobile development.
 
+> **Includes SDO custom field mappings** — These skills ship with custom field references pulled from a live SFS Sales Demo Org, covering 195+ custom fields across WorkOrder, ServiceAppointment, ServiceResource, Asset, and more. SEs get out-of-the-box awareness of demo-specific fields like depot repair status, optimization KPIs, contractor management, and Why Not scheduling analysis.
+
 ## What Are Skills?
 
 Skills are structured reference documents that Claude Code loads into context when relevant to your task. They give Claude deep domain knowledge so it can write better code, debug faster, and provide accurate guidance without you needing to look up documentation.
@@ -28,6 +30,7 @@ The complete FSL data model — objects, relationships, fields, status lifecycle
 | `relationship-map.md` | Complete relationship map with field names and cascade behavior |
 | `soql-patterns.md` | 10 common SOQL query patterns, copy-paste ready |
 | `gotchas.md` | 12 data model gotchas and best practices |
+| `sdo-custom-fields.md` | 195+ SDO custom fields across all FSL objects with demo scenario mapping |
 
 ---
 
