@@ -1,0 +1,159 @@
+# Salesforce Field Service Skills for Claude Code
+
+Developer reference skills for [Claude Code](https://docs.anthropic.com/en/docs/build-with-claude/claude-code/overview) that provide comprehensive Salesforce Field Service (SFS/FSL) knowledge — data model, scheduling engine, and mobile development.
+
+## What Are Skills?
+
+Skills are structured reference documents that Claude Code loads into context when relevant to your task. They give Claude deep domain knowledge so it can write better code, debug faster, and provide accurate guidance without you needing to look up documentation.
+
+When you're writing a SOQL query against `ServiceAppointment`, building a scheduling policy, or creating a Data Capture Flow, Claude automatically loads the relevant skill and has the full reference at hand.
+
+## Skills Included
+
+### sf-field-service-data-model
+
+The complete FSL data model — objects, relationships, fields, status lifecycles, and SOQL patterns.
+
+**Triggers when you:**
+- Write SOQL queries against FSL objects (WorkOrder, ServiceAppointment, ServiceResource, etc.)
+- Create Apex, Flows, or LWC that interact with FSL objects
+- Build Work Order or Service Appointment automation
+- Set up Maintenance Plans or Asset hierarchies
+- Create test data for FSL demos
+
+**Reference files:**
+| File | Contents |
+|------|----------|
+| `core-objects.md` | Full field tables for 20+ FSL objects |
+| `relationship-map.md` | Complete relationship map with field names and cascade behavior |
+| `soql-patterns.md` | 10 common SOQL query patterns, copy-paste ready |
+| `gotchas.md` | 12 data model gotchas and best practices |
+
+---
+
+### sf-field-service-scheduling
+
+The FSL scheduling engine — policies, work rules, service objectives, appointment booking APIs, Gantt chart, and RSO.
+
+**Triggers when you:**
+- Configure scheduling policies, work rules, or service objectives
+- Build appointment booking flows (Experience Cloud, LWC, custom)
+- Work with GetAppointmentSlots or GetAppointmentCandidates APIs
+- Debug scheduling issues ("no slots available", incorrect results)
+- Customize the Dispatcher Console / Gantt chart
+- Write Apex for programmatic scheduling
+
+**Reference files:**
+| File | Contents |
+|------|----------|
+| `work-rules.md` | All 10 work rule types with configuration details |
+| `service-objectives.md` | All objective types with scoring logic and weight strategies |
+| `appointment-booking-api.md` | GetAppointmentSlots/Candidates REST + Apex API reference |
+| `gantt-reference.md` | Dispatcher Console architecture, actions, customization |
+| `scheduling-patterns.md` | 9 common scenarios (emergency, multi-day, crew, bundling, etc.) |
+| `apex-scheduling.md` | Programmatic scheduling Apex patterns with code examples |
+
+---
+
+### sf-field-service-mobile
+
+Field Service Mobile LWC development, device capabilities, Data Capture Flows, and offline-first patterns.
+
+**Triggers when you:**
+- Build LWC components for the Field Service Mobile app
+- Use device capabilities (camera, barcode scanner, GPS, NFC)
+- Create Data Capture Flows for field data collection
+- Implement offline-capable data patterns
+- Configure Briefcase Builder for data priming
+
+**Reference files:**
+| File | Contents |
+|------|----------|
+| `mobile-capabilities.md` | Camera, barcode, GPS, NFC APIs with complete code examples |
+| `offline-patterns.md` | Wire adapter offline support matrix, Briefcase Builder, draft records |
+| `data-capture-components.md` | All DC components (dcSignature, dcImage, dcBarcode, etc.) with XML |
+| `data-capture-flows.md` | DC flow structure, deployment, voice-to-form, record mapping |
+| `mobile-lwc-patterns.md` | Common mobile patterns (photo capture, check-in, parts consumption) |
+
+## Installation
+
+### Claude Code (Recommended)
+
+Copy the skill folders into your Claude Code skills directory:
+
+```bash
+# Clone the repo
+git clone https://github.com/asvirani/sf-field-service-skills.git
+
+# Copy skills to your Claude Code skills directory
+cp -r sf-field-service-skills/sf-field-service-data-model ~/.claude/skills/
+cp -r sf-field-service-skills/sf-field-service-scheduling ~/.claude/skills/
+cp -r sf-field-service-skills/sf-field-service-mobile ~/.claude/skills/
+```
+
+Claude Code will automatically detect and load these skills when your work involves Field Service objects, scheduling, or mobile development.
+
+### Verify Installation
+
+After copying, start a new Claude Code session and ask:
+
+> "What objects are in the Field Service data model?"
+
+Claude should reference the skill and provide detailed information from the reference files.
+
+## Usage Examples
+
+### Data Model
+
+Ask Claude to write SOQL queries:
+> "Write a SOQL query to get all scheduled appointments this week with their assigned resources and travel times."
+
+### Scheduling
+
+Ask about scheduling configuration:
+> "Set up a scheduling policy for customer-facing appointment booking that prioritizes ASAP scheduling and minimizes travel."
+
+Ask for Apex scheduling code:
+> "Write an Apex class that programmatically schedules a Service Appointment using the Customer First policy."
+
+### Mobile
+
+Ask for mobile LWC code:
+> "Build an LWC quick action that scans a barcode and looks up the matching Asset, works offline."
+
+Ask about Data Capture Flows:
+> "Create a Data Capture Flow XML for an equipment inspection with photo capture, condition picklist, meter reading, and customer signature."
+
+## Compatibility
+
+- **Claude Code**: Full support (primary target)
+- **Salesforce Field Service**: Based on API v59.0+ (Winter '24 through Spring '26)
+- **FSL Managed Package**: Compatible with current versions
+- **Data Capture Flows**: Spring '24+ feature
+
+## Contributing
+
+Contributions are welcome. If you find inaccuracies or want to add coverage for new FSL features:
+
+1. Fork the repo
+2. Create a feature branch
+3. Update the relevant reference files
+4. Submit a PR with a description of what changed and why
+
+### Guidelines
+
+- Keep SKILL.md files concise (loaded into context on every trigger)
+- Put detailed content in `references/` files
+- Use tables and code blocks — no narrative prose
+- Include copy-paste-ready code examples
+- Note any Salesforce release version dependencies
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+## Author
+
+**Armaan Virani** — Lead Solutions Engineer, Salesforce Healthcare & Life Sciences
+
+Built with [Claude Code](https://docs.anthropic.com/en/docs/build-with-claude/claude-code/overview) and the [Superpowers](https://github.com/Shopify/superpower-prompts) skill framework.
