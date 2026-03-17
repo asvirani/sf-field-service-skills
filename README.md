@@ -78,6 +78,36 @@ Field Service Mobile LWC development, device capabilities, Data Capture Flows, a
 | `data-capture-flows.md` | DC flow structure, deployment, voice-to-form, record mapping |
 | `mobile-lwc-patterns.md` | Common mobile patterns (photo capture, check-in, parts consumption) |
 
+---
+
+### sf-fs-datacapture
+
+Converts images or PDFs of existing paper/digital forms into deployable Data Capture Flow XML. Share a picture of a form, get a mobile-optimized flow.
+
+*Originally from [tgmielke/sfs-skills](https://github.com/tgmielke/sfs-skills) — credit to Tyler Mielke.*
+
+**Triggers when you:**
+- Share an image or PDF of a paper form, inspection checklist, or safety form
+- Ask to convert a form into a Data Capture Flow
+- Build DC flows for field technicians
+- Need mobile-optimized form XML with voice-to-form support
+
+**Reference files:**
+| File | Contents |
+|------|----------|
+| `data-capture-flow-template.xml` | Base XML template for DataCaptureFlow |
+| `field-type-mapping.md` | Document field → DC component mapping reference |
+| `mobile-ux-guide.md` | Field Service mobile UX best practices |
+| `example-safety-hazard-check.xml` | Multi-select checklists, photo patterns |
+| `example-customer-interaction.xml` | Signature capture, satisfaction survey |
+| `example-nas-demarc-validation.xml` | Multi-screen, conditional visibility |
+
+**Key features:**
+- Auto-population from Work Order context (Account, Contact, Asset)
+- Voice-to-form via `IsLlmTargetable`
+- Known limitation handling (no inline photo upload in DC flows)
+- Offline-ready (`environments: Offline`)
+
 ## Installation
 
 ### Claude Code (Recommended)
@@ -92,6 +122,7 @@ git clone https://github.com/asvirani/sf-field-service-skills.git
 cp -r sf-field-service-skills/sf-field-service-data-model ~/.claude/skills/
 cp -r sf-field-service-skills/sf-field-service-scheduling ~/.claude/skills/
 cp -r sf-field-service-skills/sf-field-service-mobile ~/.claude/skills/
+cp -r sf-field-service-skills/sf-fs-datacapture ~/.claude/skills/
 ```
 
 Claude Code will automatically detect and load these skills when your work involves Field Service objects, scheduling, or mobile development.

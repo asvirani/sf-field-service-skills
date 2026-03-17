@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!--
+    Template: Field Service Data Capture Flow v2.0.0
+    API Version: 65.0+
+    processType: DataCaptureFlow
+    environments: Offline
+
+    Based on production flows from Salesforce Field Service orgs.
+
+    VOICE-TO-FORM:
+    customProperties > IsLlmTargetable enables voice-to-form.
+    Technicians tap the mic icon and dictate; the LLM maps speech to fields.
+
+    FIELD SERVICE DC COMPONENTS:
+    Data capture flows use runtime_service_fieldservice:dc* components:
+      dcTextInput    - text input (short or long)         fieldType: ComponentInstance
+      dcPicklist     - single-select dropdown              fieldType: ComponentChoice
+      dcCbGroup      - multi-select checkboxes             fieldType: ComponentMultiChoice
+      dcToggle       - boolean toggle                      fieldType: ComponentInstance
+      dcUpImage      - photo/camera upload                 fieldType: ComponentInstance
+      dcSignature    - signature capture                   fieldType: ComponentInstance
+    Standard flow fieldTypes (InputField, LargeTextArea, DropdownBox) are NOT used.
+
+    STYLE PROPERTIES:
+    Every field needs styleProperties with verticalAlignment=top and width.
+    width=12 for full width, width=6 for half width (side-by-side).
+
+    CONDITIONAL VISIBILITY:
+    Use visibilityRule with Toggle_Name.isActive reference to show/hide fields.
+
+    INPUT VARIABLES (always include all three):
+    parentRecordId  - Work Order or Service Appointment Id
+    parentObjectType - "WorkOrder" or "ServiceAppointment"
+    recordId        - the data capture record Id
+
+    XML ELEMENT ORDER (alphabetical):
+    areMetricsLoggedToDataCloud → choices → customProperties → description →
+    environments → interviewLabel → label → processMetadataValues →
+    processType → recordLookups → screens → start → status → variables
+    -->
+
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+
+    <!-- === CHOICES === -->
+
+    <choices>
+        <name>Choice_Fail</name>
+        <choiceText>Fail</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Fail</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_NA</name>
+        <choiceText>N/A</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>NA</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Choice_Pass</name>
+        <choiceText>Pass</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Pass</stringValue>
+        </value>
+    </choices>
+
+    <!-- === VOICE-TO-FORM (LLM ACCESS) === -->
+
+    <customProperties>
+        <name>IsLlmTargetable</name>
+        <value>
+            <stringValue>{&quot;value&quot;:&quot;true&quot;}</stringValue>
+        </value>
+    </customProperties>
+
+    <description>{{FLOW_DESCRIPTION}} — Field Service data capture form. Voice-to-Form enabled.</description>
+
+    <environments>Offline</environments>
+
+    <interviewLabel>{{FLOW_LABEL}} {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>{{FLOW_LABEL}}</label>
+
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+
+    <processType>DataCaptureFlow</processType>
+
+    <!-- === WORK ORDER LOOKUP === -->
+
+    <recordLookups>
+        <name>Get_Work_Order</name>
+        <label>Get Work Order</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Screen_Section_1</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>parentRecordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>WorkOrder</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+
+    <!--
+    ══════════════════════════════════════════════════════════════════
+    SCREEN 1: First Section
+    ══════════════════════════════════════════════════════════════════
+    -->
+    <screens>
+        <description>{{Section 1 description}}</description>
+        <name>Screen_Section_1</name>
+        <label>{{Section 1 Label}}</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Screen_Section_2</targetReference>
+        </connector>
+        <!-- Work Order context -->
+        <fields>
+            <name>Display_WO_Context</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Work Order:&lt;/b&gt; {!Get_Work_Order.WorkOrderNumber}&lt;/p&gt;&lt;p&gt;&lt;b&gt;Subject:&lt;/b&gt; {!Get_Work_Order.Subject}&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <!-- Section header -->
+        <fields>
+            <name>Section_1_Header</name>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;{{Section 1 Title}}&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <!-- Text input (required) -->
+        <fields>
+            <name>{{Field_1_Name}}</name>
+            <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>{{Field 1 Label}}</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>required</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <!-- Picklist (single-select) -->
+        <fields>
+            <name>{{Picklist_Name}}</name>
+            <choiceReferences>Choice_Pass</choiceReferences>
+            <choiceReferences>Choice_Fail</choiceReferences>
+            <choiceReferences>Choice_NA</choiceReferences>
+            <extensionName>runtime_service_fieldservice:dcPicklist</extensionName>
+            <fieldText>{{Picklist Label}}</fieldText>
+            <fieldType>ComponentChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    <!--
+    ══════════════════════════════════════════════════════════════════
+    SCREEN 2: Second Section (with toggle + conditional visibility)
+    ══════════════════════════════════════════════════════════════════
+    -->
+    <screens>
+        <description>{{Section 2 description}}</description>
+        <name>Screen_Section_2</name>
+        <label>{{Section 2 Label}}</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <!-- Toggle -->
+        <fields>
+            <name>Has_Issues</name>
+            <extensionName>runtime_service_fieldservice:dcToggle</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Are there any issues?</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <!-- Conditional field (shown when toggle is ON) -->
+        <fields>
+            <name>Issue_Description</name>
+            <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Describe the issue in detail</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Has_Issues.isActive</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <!-- Text input -->
+        <fields>
+            <name>Final_Notes</name>
+            <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>Additional notes or observations</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+
+    <!-- Start Element -->
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Work_Order</targetReference>
+        </connector>
+    </start>
+
+    <status>Draft</status>
+
+    <!-- === INPUT VARIABLES (always include all three) === -->
+
+    <variables>
+        <name>parentObjectType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>parentRecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
