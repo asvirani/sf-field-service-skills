@@ -110,26 +110,33 @@ Converts images or PDFs of existing paper/digital forms into deployable Data Cap
 
 ## Installation
 
-### Claude Code (Recommended)
-
-Copy the skill folders into your Claude Code skills directory:
+### One-Line Install (Recommended)
 
 ```bash
-# Clone the repo
-git clone https://github.com/asvirani/sf-field-service-skills.git
+curl -sSL https://raw.githubusercontent.com/asvirani/sf-field-service-skills/main/install.sh | bash
+```
 
-# Copy skills to your Claude Code skills directory
+Or with wget:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/asvirani/sf-field-service-skills/main/install.sh | bash
+```
+
+Auto-detects Claude Code, Cursor, and Windsurf — installs to all detected IDEs.
+
+### Manual Install
+
+```bash
+git clone https://github.com/asvirani/sf-field-service-skills.git
 cp -r sf-field-service-skills/sf-field-service-data-model ~/.claude/skills/
 cp -r sf-field-service-skills/sf-field-service-scheduling ~/.claude/skills/
 cp -r sf-field-service-skills/sf-field-service-mobile ~/.claude/skills/
 cp -r sf-field-service-skills/sf-fs-datacapture ~/.claude/skills/
 ```
 
-Claude Code will automatically detect and load these skills when your work involves Field Service objects, scheduling, or mobile development.
-
 ### Verify Installation
 
-After copying, start a new Claude Code session and ask:
+After installing, start a new Claude Code session and ask:
 
 > "What objects are in the Field Service data model?"
 
